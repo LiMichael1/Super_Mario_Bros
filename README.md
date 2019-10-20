@@ -1,2 +1,5 @@
 # Super_Mario_Bros
-Super Mario Bros Game 
+CPSC 386
+Mohamed
+Giuliana Pham
+Michael Li
