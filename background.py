@@ -2,6 +2,7 @@ import pygame
 import sys
 from settings import *
 import os
+from stats import Stats
 
 __all__ = ['Background']
 
@@ -41,9 +42,10 @@ class Background:
         self.panned = False
         self.bg_length = None
         self.bg_height = None
+        self.lives = 3
 
         # self.mario.rect.bottom = GROUND_HEIGHT * BG_SCALER
-        self.prev_mario_x = 0
+        self.prev_mario_x = -50
 
     def start(self):
         if not self.panned_right:
@@ -57,8 +59,6 @@ class Background:
         # else:
 
         x = mario.rect.x - self.prev_mario_x
-        if x > 0:
-            print(x)
         self.prev_mario_x = mario.rect.x
         self.move_screen(x)
         # self.blit_rect(frame_index)
@@ -81,7 +81,6 @@ class Background:
         for enemy in self.enemies:
             enemy.rect.x -= vel
         self.finish_flag.rect.x -= vel
-
 
     def move_screen(self, vel):
         if -self.x < self.bg[self.level].get_rect().width - self.screen.get_rect().width:
@@ -114,8 +113,9 @@ class Background:
     def setup_invisible_rect(self):
         pass
 
-    def blit_rect(self, frame_index):
+    def blit_rect(self, frame_index, mario):
         # self.blocks.draw(self.screen)
+        self.check_mario_collisions(mario=mario)
         self.coin_boxes.update(frame_index)
         self.coin_boxes.draw(self.screen)
         self.brick_group.draw(self.screen)
@@ -129,8 +129,6 @@ class Background:
         for shroom in self.shroom_group:
             if shroom.state != REVEALING:
                 self.adjust_mushroom_position(shroom)
-
-
 
         # self.brick_group.draw()
 
@@ -154,8 +152,6 @@ class Background:
         self.setup_groups()
         self.setup_enemies()
 
-
-
     def setup_groups(self):
         self.platform_group = pygame.sprite.Group(self.coin_boxes, self.blocks, self.brick_group)
 
@@ -171,7 +167,6 @@ class Background:
         collider = pygame.sprite.spritecollideany(obj, self.platform_group)
 
         if collider:
-
             self.adjust_x_position(obj, collider)
 
     def adjust_mushroom_position(self, mushroom):
@@ -251,10 +246,6 @@ class Background:
 
         self.check_enemy_y_collisions(enemy)
 
-
-
-
-
     def powerup_collisions(self, mario):
         mario_powerup = pygame.sprite.spritecollideany(mario, self.powerup_group)
         mario_shroom = pygame.sprite.spritecollideany(mario, self.shroom_group)
@@ -262,30 +253,77 @@ class Background:
     def win(self):
         pass
 
-    def mario_y_collisions(self, mario):
+    def check_mario_falling(self, mario, collider):
+        mario.rect.y += 1
+
+        about_to_collide = pygame.sprite.spritecollideany(mario, collider)
+
+        if about_to_collide:
+            mario.rect.y -= 1
+
+    def check_mario_y_collisions(self, mario):
         coin_boxes = pygame.sprite.spritecollideany(mario, self.coin_boxes)
         bricks = pygame.sprite.spritecollideany(mario, self.brick_group)
         collider = pygame.sprite.spritecollideany(mario, self.blocks)
-
+        print('checking')
         if coin_boxes:
-            if mario.rect.top >= coin_boxes.bottom:
-                coin_boxes.state = REVEALING
-                if coin_boxes.prize == COIN:
-                    self.coins += 1
-                mario.rect.top = coin_boxes.rect.bottom
-            elif mario.rect.bottom < coin_boxes.top:
-                mario.rect.bottom = coin_boxes.top
+            print(mario)
+            if mario.rect.y > coin_boxes.rect.y:
+                if coin_boxes.prize != EMPTY:
+                    coin_boxes.state = REVEALING
+                    if coin_boxes.prize == COIN:
+                        self.coins += 1
+                        if self.coins > 100:
+                            self.lives += 1
+                    mario.rect.top = coin_boxes.rect.bottom
+            elif mario.rect.bottom <= coin_boxes.rect.top:
+                mario.rect.bottom = coin_boxes.rect.top
 
         elif bricks:
-            if mario.rect.top >= bricks.bottom:
+            print('bricks')
+            if mario.rect.y > bricks.rect.y:
                 bricks.kill()
-                mario.rect.top = bricks.rect.bottom
-            elif mario.rect.bottom < bricks.top:
-                mario.rect.bottom = bricks.top
+                mario.rect.y = bricks.rect.bottom
+            elif mario.rect.y < bricks.rect.top:
+                mario.rect.y = bricks.rect.bottom
 
         elif collider:
-            if mario.rect.bottom < collider.rect.top:
+            print('collider')
+            if mario.rect.bottom < collider.rect.bottom:
                 mario.rect.bottom = collider.rect.top
+            elif mario.rect.top > collider.rect.top:
+                mario.rect.top = collider.rect.bottom
+
+        # else:
+            # self.check_mario_falling(mario, coin_boxes)
+            # self.check_mario_falling(mario, bricks)
+            # self.check_mario_falling(mario, collider)
+
+    def check_mario_x_collisions(self, mario):
+        collider = pygame.sprite.spritecollideany(mario, self.platform_group)
+        if collider:
+            if mario.rect.x < collider.rect.x:
+                mario.rect.right = collider.rect.left
+            else:
+                mario.rect.left = collider.rect.right
+
+    def check_mario_collisions(self, mario):
+        self.check_mario_x_collisions(mario)
+        self.check_mario_y_collisions(mario)
+
+    def check_mario_enemy_collisions(self, mario):
+        enemy_hit = pygame.sprite.spritecollideany(mario, self.enemies)
+
+        if enemy_hit:
+            if mario.rect.bottom <= enemy_hit.top:
+                enemy_hit.kill()
+            else:
+                mario.rect.x = 100
+                self.lives -= 1
+
+            if self.lives <= 0:
+                print('GAME OVER')
+
 
 if __name__ == '__main__':
     pygame.init()
