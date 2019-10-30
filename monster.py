@@ -276,4 +276,20 @@ class Fire_Breath(Monster):
         self.images.append(self.get_image(131, 252, 26, 9))
         self.images.append(self.get_image(161, 252, 26, 9))
         self.images.append(self.get_image(191, 252, 26, 9))
-      
+
+
+pygame.init()
+screen = pygame.display.set_mode((600, 600))
+enemy = Goomba(screen, 550, 600, -1)
+while True:
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            sys.exit()
+
+    screen.fill((0,0,0))
+    enemy.update()
+    enemy.blitme()
+    pygame.display.flip()
+    
+
+    
