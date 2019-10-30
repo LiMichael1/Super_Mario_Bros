@@ -121,7 +121,7 @@ class Background:
         self.brick_group.draw(self.screen)
         self.platform_group.update(frame_index)
         for enemy in self.enemies:
-            # enemy.update()
+            #enemy.update()
             enemy.blitme()
             self.check_enemy_collisions(enemy)
         # self.platform_group.draw(self.screen)

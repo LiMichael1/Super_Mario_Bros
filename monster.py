@@ -40,8 +40,7 @@ class Monster(pygame.sprite.Sprite):
         image = pygame.Surface([width, height]).convert()
         rect = image.get_rect()
 
-        spr_image = self.sheet.image_at((x, y, width, height))
-        image.blit(spr_image, (0, 0), (x, y, width, height))
+        image.blit(self.sheet.sheet, (0, 0), (x, y, width, height))
         image.set_colorkey((0, 0, 0))
 
         image = pygame.transform.scale(image,
@@ -279,18 +278,19 @@ class Fire_Breath(Monster):
         self.images.append(self.get_image(191, 252, 26, 9))
 
 
-pygame.init()
-screen = pygame.display.set_mode((600, 600))
-enemy = Goomba(screen, 550, 600, -1)
-while True:
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            sys.exit()
+if __name__ == '__main__':
+    pygame.init()
+    screen = pygame.display.set_mode((600, 600))
+    enemy = Goomba(screen, 550, 600, -1)
+    while True:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                sys.exit()
 
-    screen.fill((0,0,0))
-    enemy.update()
-    enemy.blitme()
-    pygame.display.flip()
+        screen.fill((255,255,255))
+        enemy.update()
+        enemy.blitme()
+        pygame.display.flip()
     
 
     
