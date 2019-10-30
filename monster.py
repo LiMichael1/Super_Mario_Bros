@@ -14,6 +14,7 @@ class Monster(pygame.sprite.Sprite):
         self.timer = 0
         self.death_timer = 0
         self.animate_timer = 0
+        self.duration = 120
         self.dir = -1
         self.gravity = 1.5
         self.state = 'normal'
@@ -51,7 +52,7 @@ class Monster(pygame.sprite.Sprite):
 
     #default move function
     def move(self):
-        if self.timer - self.animate_timer > 120:
+        if self.timer - self.animate_timer > self.duration:
             if self.frame == 0:
                 self.frame += 1
             elif self.frame == 1:
@@ -122,6 +123,7 @@ class Koopa(Monster):
     def __init__(self, screen, x, y, dir = -1, name = 'koopa'):
         super().__init__(screen)
         self.prepare(x, y, dir, name, self.add_frames)
+        self.duration = 250
     
 
     def add_frames(self):
@@ -281,16 +283,15 @@ class Fire_Breath(Monster):
 if __name__ == '__main__':
     pygame.init()
     screen = pygame.display.set_mode((600, 600))
-    enemy = Goomba(screen, 550, 600, -1)
+    enemy = Goomba(screen, 200, 200, -1)
     while True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 sys.exit()
 
-        screen.fill((255,255,255))
+        #screen.fill((255,255,255))
+        screen.fill((0,0,0))
         enemy.update()
         enemy.blitme()
         pygame.display.flip()
-    
-
     
