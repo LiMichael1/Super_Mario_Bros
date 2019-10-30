@@ -1,5 +1,6 @@
 import pygame
 from pygame.sprite import Sprite
+from settings import *
 from pygame import Rect
 from time import sleep
 
@@ -18,7 +19,7 @@ class SuperMario(Sprite):
             del firemario
         else:
             self.rect.centerx = self.screen_rect.centerx
-            self.rect.bottom = self.screen_rect.bottom
+            self.rect.bottom = (GROUND_HEIGHT * BG_SCALER)
 
         self.width = self.image.get_width()
         self.height = self.image.get_height()
@@ -104,7 +105,7 @@ class SuperMario(Sprite):
             self.image = pygame.image.load('images/SuperMario/13.png')
         self.rect = self.image.get_rect()
         self.rect.centerx = self.centerx
-        self.rect.bottom = self.screen_rect.bottom
+        self.rect.bottom = (GROUND_HEIGHT * BG_SCALER)
         self.screen.blit(self.image, self.rect)
         self.width = self.image.get_width()
         self.height = self.image.get_height()
@@ -116,19 +117,19 @@ class SuperMario(Sprite):
         if stats.mario_moving_right and self.rect.right < self.screen_rect.right:
             if stats.frame_curr > 5:
                 stats.frame_curr = .05
-            self.centerx += .9
+            self.centerx += 1.2
             stats.frame_curr += .05
         if stats.mario_moving_left and self.rect.left > 0:
             if stats.frame_curr < -5:
                 stats.frame_curr = -.05
-            self.centerx -= .9
+            self.centerx -= 1.2
             stats.frame_curr -= .05
         if not stats.mario_moving_left and not stats.mario_moving_right:
             stats.frame_curr = 0
 
         self.rect.centerx = self.centerx
         self.rect.left = self.rect.left
-        self.rect.bottom = self.screen_rect.bottom
+        self.rect.bottom = (GROUND_HEIGHT * BG_SCALER)
 
     def jump_straight(self, stats):
         x = 0

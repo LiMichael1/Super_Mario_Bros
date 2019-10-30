@@ -2,6 +2,7 @@ import pygame, sys
 from pygame import *
 from pygame.sprite import *
 from spritesheet import SpriteSheet
+from settings import *
 
 class Monster(pygame.sprite.Sprite):
     def __init__(self, screen):
@@ -22,8 +23,8 @@ class Monster(pygame.sprite.Sprite):
         add_frames()
         self.image = self.images[self.frame]
         self.rect = self.image.get_rect()
-        self.rect.x = x
-        self.rect.bottom = y
+        self.rect.x = x * BG_SCALER
+        self.rect.bottom = GROUND_HEIGHT * BG_SCALER
         self.x = float(self.rect.x)
         self.y = float(self.rect.y)
         self.dir = dir
@@ -44,8 +45,8 @@ class Monster(pygame.sprite.Sprite):
         image.set_colorkey((0, 0, 0))
 
         image = pygame.transform.scale(image,
-                                       (int(rect.width * 2),
-                                        int(rect.height * 2)))
+                                       (int(rect.width * BG_SCALER),
+                                        int(rect.height * BG_SCALER)))
         return image
 
 

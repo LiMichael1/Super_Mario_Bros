@@ -17,8 +17,6 @@ def run_game():
     stats = Stats()
 
     mario = SuperMario(screen)
-    mario.rect.x = screen.get_rect().centerx
-    mario.rect.y = GROUND_HEIGHT * BG_SCALER
     clock = pygame.time.Clock()
     bg = Level1(screen=screen)
 

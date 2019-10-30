@@ -1,5 +1,6 @@
 import pygame
 from pygame import Rect
+from settings import *
 from Super_Mario import SuperMario
 from time import sleep
 from fireball import Fireball
@@ -103,7 +104,7 @@ class FireMario(SuperMario):
             self.image = pygame.image.load('images/13.png')
         self.rect = self.image.get_rect()
         self.rect.centerx = self.centerx
-        self.rect.bottom = self.screen_rect.bottom
+        self.rect.bottom = (GROUND_HEIGHT * BG_SCALER)
         self.screen.blit(self.image, self.rect)
         self.width = self.image.get_width()
         self.height = self.image.get_height()
