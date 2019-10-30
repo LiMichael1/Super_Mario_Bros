@@ -83,7 +83,7 @@ class Background:
             self.panned_right = True
 
     def pan_left(self):
-        if -self.x > self.screen.get_rect().width:
+        if -self.x > 0:
             self.x -= -10
             self.move_items(-10)
         else:
@@ -101,11 +101,11 @@ class Background:
 
     def blit_rect(self, frame_index):
         # self.blocks.draw(self.screen)
-        # self.coin_boxes.update(frame_index)
-        # self.coin_boxes.draw(self.screen)
-        # self.brick_group.draw(self.screen)
+        self.coin_boxes.update(frame_index)
+        self.coin_boxes.draw(self.screen)
+        self.brick_group.draw(self.screen)
         self.platform_group.update(frame_index)
-        self.platform_group.draw(self.screen)
+        # self.platform_group.draw(self.screen)
         self.finish_flag.draw()
         for shroom in self.shroom_group:
             if shroom.state != REVEALING:

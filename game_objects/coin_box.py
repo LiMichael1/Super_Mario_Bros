@@ -61,8 +61,8 @@ class CoinBox(pygame.sprite.Sprite):
         if self.state != EMPTY:
             f = index // 12  # slow down
             self.image = self.frames[f % 3]
-            if index > 150:
-                self.start_bump()
+            # if index > 150:
+            #     self.start_bump()
 
     def start_bump(self):
         #goes up
