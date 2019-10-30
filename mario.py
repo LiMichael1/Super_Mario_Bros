@@ -1,5 +1,6 @@
 import pygame
 from pygame import Rect
+from settings import *
 from Super_Mario import SuperMario
 from time import sleep
 
@@ -116,5 +117,5 @@ class Mario(SuperMario):
             self.update_image_dims()
         self.rect = self.image.get_rect()
         self.rect.centerx = self.centerx
-        self.rect.bottom = self.screen_rect.bottom
+        self.rect.bottom = (GROUND_HEIGHT * BG_SCALER)
         self.screen.blit(self.image, self.rect)
