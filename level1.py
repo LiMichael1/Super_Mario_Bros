@@ -5,6 +5,8 @@ from Collider import Collider
 from game_objects.tile import Tile
 from game_objects.coin_box import CoinBox
 from game_objects.finish_flag import Flag
+from game_functions import *
+from monster import Goomba
 
 import sys
 
@@ -133,7 +135,12 @@ class Level1(Background):
     def setup_flag(self):
         self.finish_flag = Flag(screen=self.screen, x=3152, y=40, box_height=170)
 
-
+    def setup_enemies(self):
+        print('Created')
+        self.enemies.add(Goomba(screen=self.screen, x=512, y=GROUND_HEIGHT))
+        self.enemies.add(Goomba(screen=self.screen, x=659, y=GROUND_HEIGHT))
+        self.enemies.add(Goomba(screen=self.screen, x=1174, y=GROUND_HEIGHT))
+        self.enemies.add(Goomba(screen=self.screen, x=1691, y=GROUND_HEIGHT))
 
 
     # def check_collide(self, mario, collider):
@@ -151,12 +158,6 @@ if __name__ == '__main__':
     clock = pygame.time.Clock()
     bg = Level1(screen=screen)
     frame_index = 140
-
-    # bg.draw()
-    # bg.blit_rect()
-    # pygame.display.flip()
-    # if input() == '\n':
-    #     pygame.quit()
 
     while True:
         for event in pygame.event.get():
