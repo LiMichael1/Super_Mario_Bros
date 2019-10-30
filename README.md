@@ -1,5 +1,5 @@
 # Super_Mario_Bros
 CPSC 386
-Mohamed
+Mohamed Samatar
 Giuliana Pham
 Michael Li
